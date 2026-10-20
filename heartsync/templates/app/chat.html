@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Chats · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="chat-layout {{ 'has-active' if conversation_id else '' }}" id="chat-root" data-active="{{ conversation_id }}" data-me="{{ user.id }}">
+    <aside aria-label="Conversations">
+      <div class="chat-head">
+        <h1 class="h3 mb-0">Chats</h1>
+        <span class="spacer"></span>
+        <a class="btn sm ghost" href="/matches">Matches</a>
+      </div>
+      <div class="p-sm">
+        <label class="sr-only" for="conv-search">Search conversations</label>
+        <input id="conv-search" type="search" placeholder="Search names or messages">
+        <div class="row gap-sm mt-05">
+          <button class="btn sm" data-archived="0" aria-pressed="true">Inbox</button>
+          <button class="btn sm" data-archived="1" aria-pressed="false">Archived</button>
+        </div>
+      </div>
+      <ul class="list" id="conv-list"><li class="list-item"><div class="skeleton sk-sm w-full"></div></li></ul>
+    </aside>
+    <section class="chat-pane" id="chat-pane" aria-label="Conversation">
+      <div class="chat-empty"><div><div class="empty"><div class="art"><svg class="icon"><use href="#i-chat"/></svg></div><h2>Your conversations</h2><p>Pick a chat on the left, or find new people in Discover.</p></div></div></div>
+    </section>
+  </div>
+</div>
+{% include "partials/report_dialog.html" %}
+<dialog id="phone-dialog" aria-labelledby="phone-title">
+  <form method="dialog">
+    <div class="dialog-body">
+      <h2 id="phone-title">Share your phone number?</h2>
+      <p>Only <strong data-phone-name>this match</strong> will see your verified number. You can stop sharing at any time, and unmatching or blocking hides it automatically.</p>
+      <p class="small muted">Tip: many people prefer to video call in the app's chat first. Never share your number with someone who pressures you or asks for money.</p>
+      <label class="check"><input type="checkbox" id="phone-confirm"> I understand and want to share my number with this person.</label>
+    </div>
+    <div class="dialog-actions"><button class="btn" value="cancel">Cancel</button><button class="btn primary" value="ok" id="phone-share-ok" disabled>Share number</button></div>
+  </form>
+</dialog>
+{% endblock %}
+{% block scripts %}<script src="/static/js/safety-actions.js"></script><script src="/static/js/chat.js"></script>{% endblock %}

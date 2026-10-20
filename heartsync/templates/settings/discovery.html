@@ -1,0 +1,19 @@
+{% extends "settings/_layout.html" %}
+{% block settings %}
+<section class="card">
+  <h2>Discovery preferences</h2>
+  <p class="muted small">These set the defaults for Discover. You can still use filters in Search.</p>
+  <form id="prefs-form" data-api="/api/preferences" data-method="PUT" data-stay data-success="Preferences saved" data-transform="prefs" novalidate>
+    <div class="field"><span class="label">Age range</span>
+      <div class="range-pair"><input type="number" name="age_min" min="18" max="100" aria-label="Minimum age" required><span>to</span><input type="number" name="age_max" min="18" max="100" aria-label="Maximum age" required></div>
+      <p class="error-text" data-error-for="age_min" hidden></p>
+    </div>
+    <div class="field"><label for="max-dist">Maximum distance</label>
+      <select id="max-dist" name="max_distance_km"><option value="">Anywhere</option><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option><option value="100">100 km</option><option value="250">250 km</option><option value="500">500 km</option></select>
+    </div>
+    <label class="switch"><span><strong>Nearby discovery</strong><br><span class="small muted">Show a "Nearby" tab based on your chosen city. We never use device GPS.</span></span><input type="checkbox" name="nearby_enabled" role="switch"></label>
+    <p class="notice" data-form-status hidden></p>
+    <button class="btn primary mt-1" type="submit">Save</button>
+  </form>
+</section>
+{% endblock %}

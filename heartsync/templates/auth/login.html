@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Sign in · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card pad-lg auth-card">
+    <h1>Welcome back</h1>
+    {% if reset %}<p class="notice ok">Your password has been reset. Sign in with your new password.</p>{% endif %}
+    <form data-api="/api/auth/login" data-allow401 {% if next %}data-next="{{ next }}"{% endif %} id="login-form" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="notice danger" data-form-status hidden></p>
+      <button class="btn primary block mt-1" type="submit">Sign in</button>
+    </form>
+    <p class="center small mt-1"><a href="/forgot-password">Forgot your password?</a></p>
+    <p class="center small">New here? <a href="/signup">Create an account</a></p>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/login.js"></script>{% endblock %}

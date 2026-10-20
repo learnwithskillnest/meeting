@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Notifications · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="narrow" data-page="notifications">
+  <div class="page-head">
+    <div><h1>Notifications</h1></div>
+    <span class="spacer"></span>
+    <button class="btn sm" id="mark-all">Mark all as read</button>
+    <a class="btn sm ghost" href="/settings/notifications">Settings</a>
+  </div>
+  <div class="card p-0 overflow-hidden"><ul class="list" id="notif-list"><li class="list-item"><div class="skeleton sk-sm w-full"></div></li></ul></div>
+  <div class="center mt-1"><button class="btn" id="notif-more" hidden>Load more</button></div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/pages.js"></script>{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Discover · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container discover-page">
+  <div class="page-head">
+    <div><h1>Discover</h1><p class="muted" id="usage-line">Finding people who fit you…</p></div>
+    <span class="spacer"></span>
+    <a class="btn" href="/search"><svg class="icon"><use href="#i-sliders"/></svg> Search & filters</a>
+  </div>
+  <div class="mode-tabs" role="group" aria-label="Discovery mode">
+    <button class="btn sm" data-mode="all" aria-pressed="true">For you</button>
+    <button class="btn sm" data-mode="daily" aria-pressed="false">Daily picks</button>
+    <button class="btn sm" data-mode="new" aria-pressed="false">New members</button>
+    <button class="btn sm" data-mode="active" aria-pressed="false">Recently active</button>
+    <button class="btn sm" data-mode="nearby" aria-pressed="false">Nearby</button>
+  </div>
+  <div class="discover-layout">
+    <div>
+      <div class="deck" id="deck" aria-live="polite">
+        <div class="profile-card skeleton" aria-hidden="true"></div>
+      </div>
+      <div class="actions" id="actions">
+        <button class="action sm undo" data-act="undo" aria-label="Undo last swipe" title="Undo (Plus)"><svg class="icon"><use href="#i-undo"/></svg></button>
+        <button class="action pass" data-act="pass" aria-label="Pass" title="Pass (←)"><svg class="icon"><use href="#i-x"/></svg></button>
+        <button class="action like" data-act="like" aria-label="Like" title="Like (→)"><svg class="icon"><use href="#i-heart"/></svg></button>
+        <button class="action sm super" data-act="superlike" aria-label="Super Like" title="Super Like (↑)"><svg class="icon"><use href="#i-star"/></svg></button>
+      </div>
+      <p class="center small muted mt-1">Keyboard: ← pass · → like · ↑ super like · Enter view profile</p>
+    </div>
+    <aside class="stack">
+      <div class="card" id="profile-peek" hidden></div>
+      <div class="card">
+        <h3>Boost your profile</h3>
+        <p class="small muted">Be among the first profiles people see for 30 minutes.</p>
+        <button class="btn block" id="boost-btn"><svg class="icon"><use href="#i-zap"/></svg> Boost</button>
+      </div>
+      <div class="card">
+        <h3>Stay safe</h3>
+        <p class="small muted">Keep chats on {{ settings.brand_name }} until you're comfortable, and never send money to someone you haven't met.</p>
+        <a class="small" href="/safety">Safety tips →</a>
+      </div>
+    </aside>
+  </div>
+</div>
+<dialog id="match-dialog" aria-labelledby="match-title">
+  <div class="match-burst">
+    <h2 id="match-title">It's a match!</h2>
+    <div class="pair" id="match-pair"></div>
+    <p id="match-text"></p>
+  </div>
+  <div class="dialog-actions">
+    <button class="btn" id="match-keep">Keep swiping</button>
+    <a class="btn accent" id="match-chat" href="/chat">Send a message</a>
+  </div>
+</dialog>
+{% endblock %}
+{% block scripts %}<script src="/static/js/cards.js"></script><script src="/static/js/discover.js"></script>{% endblock %}

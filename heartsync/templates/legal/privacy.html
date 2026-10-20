@@ -1,0 +1,47 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Privacy Policy · {{ settings.brand_name }}{% endblock %}
+{% block legal %}
+<h1>Privacy Policy</h1>
+<p>This policy explains what personal data {{ settings.brand_name }} collects, why, and the choices you have. It is drafted with India's Digital Personal Data Protection Act, 2023 in mind; counsel must confirm requirements for every region you operate in.</p>
+
+<h2>What we collect</h2>
+<ul>
+  <li><strong>Account data:</strong> email, password (stored only as a salted hash), date of birth (to confirm you're 18+; only your age is shown).</li>
+  <li><strong>Phone number:</strong> to verify your account. It is stored separately from your profile, never shown publicly, and only revealed to a specific match if you choose to share it.</li>
+  <li><strong>Profile data you choose to add:</strong> photos, name, gender, preferences, lifestyle details and optional sensitive details such as religion or family plans. You control the visibility of each.</li>
+  <li><strong>Location:</strong> only the city you select. We do not collect device GPS. Distances are approximate.</li>
+  <li><strong>Activity:</strong> likes, matches, messages, reports, blocks and approximate last-active time.</li>
+  <li><strong>Payments:</strong> plan, amounts and provider references. Card details are handled by the payment provider, not by us.</li>
+  <li><strong>Security data:</strong> session information and hashed network identifiers used to prevent abuse.</li>
+</ul>
+
+<h2>Why we use it</h2>
+<ul>
+  <li>To provide matching, discovery and chat (performance of the service you requested).</li>
+  <li>To keep members safe: verification, fraud and spam detection, moderation of reports.</li>
+  <li>To process subscriptions and meet legal obligations.</li>
+  <li>To send service messages and, only if you opt in, product news.</li>
+</ul>
+<p>We do not sell personal data. Compatibility signals use only information you chose to share and are explained on each profile; we do not infer sensitive characteristics.</p>
+
+<h2>Who can see your data</h2>
+<p>Other members see your profile according to your visibility settings. Our moderators can access reported content and account details needed to investigate. Service providers (hosting, email, SMS, payments) process data on our behalf under contract.</p>
+
+<h2>Your rights</h2>
+<ul>
+  <li>Access and download your data (Settings → Account → Download my data).</li>
+  <li>Correct your profile at any time.</li>
+  <li>Delete your account (Settings → Account → Delete account).</li>
+  <li>Withdraw consent for optional processing, such as marketing emails.</li>
+  <li>Raise a grievance with our Grievance Officer: [NAME, EMAIL].</li>
+</ul>
+
+<h2>Retention</h2>
+<p>When you delete your account we delete your profile, photos, likes, contact details and message contents promptly. We retain limited records — such as reports made about an account, moderation decisions, payment records required by tax law, and an anonymised account tombstone — for as long as needed for safety, dispute resolution and legal obligations. [Counsel to set specific periods.]</p>
+
+<h2>Security</h2>
+<p>We use encrypted connections, hashed passwords, private media storage with expiring links, rate limiting and access controls. No system is perfectly secure; tell us at {{ settings.support_email }} if you find a problem.</p>
+
+<h2>Children</h2>
+<p>The Service is only for adults 18+. We remove accounts we believe belong to minors.</p>
+{% endblock %}

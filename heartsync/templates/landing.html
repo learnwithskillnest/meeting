@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ settings.brand_name }} — Dating for adults who want something real{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow">Dating, done with care</p>
+      <h1>Find someone who's <em>actually</em> in sync with you.</h1>
+      <p class="lede">{{ settings.brand_name }} matches adults on what matters to them — values, goals and the little things — with privacy and safety built in from the first hello.</p>
+      <div class="row">
+        <a class="btn accent" href="/signup">Create your free profile</a>
+        <a class="btn" href="/login">I already have an account</a>
+      </div>
+      <p class="small muted mt-1">18+ only · Verified phone numbers · Your number stays private</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="hero-card one"><div><div class="who">Ananya, 27</div><div class="what">Loves chai, trekking & old Hindi songs</div></div></div>
+      <div class="hero-card two"><div><div class="who">Kabir, 29</div><div class="what">3 shared interests · Both want long-term</div></div></div>
+      <div class="hero-heart"><svg class="icon hero-heart-icon"><use href="#i-heart"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <h2 class="center">Built around trust</h2>
+    <p class="center muted measure">Every feature starts from one question: would we be comfortable if this were our sister, friend or parent using it?</p>
+    <div class="grid cols-3 mt-2">
+      <div class="card feature"><div class="icon-wrap"><svg class="icon"><use href="#i-shield"/></svg></div><h3>Verified members</h3><p class="muted">Email and mobile verification for everyone, plus optional photo verification reviewed by our team.</p></div>
+      <div class="card feature"><div class="icon-wrap"><svg class="icon"><use href="#i-lock"/></svg></div><h3>Your number, your call</h3><p class="muted">Your phone number is never on your profile. Share it with one match when you're ready — and take it back anytime.</p></div>
+      <div class="card feature"><div class="icon-wrap"><svg class="icon"><use href="#i-sliders"/></svg></div><h3>Filters that respect people</h3><p class="muted">Search by goals, lifestyle, languages and interests. We don't offer filters designed to exclude people for who they are.</p></div>
+      <div class="card feature"><div class="icon-wrap"><svg class="icon"><use href="#i-heart"/></svg></div><h3>Honest compatibility</h3><p class="muted">We show <em>why</em> someone might be a good fit — shared interests, goals, languages — never a mystery score.</p></div>
+      <div class="card feature"><div class="icon-wrap"><svg class="icon"><use href="#i-chat"/></svg></div><h3>Chat only after a match</h3><p class="muted">No unsolicited messages. Conversations open only when you both say yes.</p></div>
+      <div class="card feature"><div class="icon-wrap"><svg class="icon"><use href="#i-flag"/></svg></div><h3>Real moderation</h3><p class="muted">Block and report in two taps. A human team reviews reports, and repeat offenders are removed.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="center">How it works</h2>
+    <div class="grid cols-3 mt-15">
+      <div><p class="eyebrow">Step 1</p><h3>Make a profile that sounds like you</h3><p class="muted">Photos, a few prompts, what you're looking for. You decide who sees each detail.</p></div>
+      <div><p class="eyebrow">Step 2</p><h3>Discover people who fit</h3><p class="muted">Swipe through daily suggestions or search with filters. Like someone — if they like you back, it's a match.</p></div>
+      <div><p class="eyebrow">Step 3</p><h3>Talk, then meet safely</h3><p class="muted">Chat in the app, share your number when it feels right, and use our safety tips before meeting.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band row between">
+      <div><h2>Your person might be one like away.</h2><p class="soft mb-0">Free to join. Premium is optional and cancellable anytime.</p></div>
+      <a class="btn" href="/signup">Get started</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

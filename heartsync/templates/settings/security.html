@@ -1,0 +1,18 @@
+{% extends "settings/_layout.html" %}
+{% block settings %}
+<section class="card">
+  <h2>Change password</h2>
+  <form data-api="/api/auth/password/change" data-stay data-success="Password changed. Other devices have been signed out." novalidate>
+    <div class="grid cols-2">
+      <div class="field"><label for="cur-pw">Current password</label><input id="cur-pw" name="current_password" type="password" autocomplete="current-password" required><p class="error-text" data-error-for="current_password" hidden></p></div>
+      <div class="field"><label for="new-pw">New password</label><input id="new-pw" name="new_password" type="password" autocomplete="new-password" required><p class="error-text" data-error-for="new_password" hidden></p></div>
+    </div>
+    <p class="notice" data-form-status hidden></p>
+    <button class="btn primary mt-1" type="submit">Update password</button>
+  </form>
+</section>
+<section class="card">
+  <div class="row between"><h2 class="mb-0">Where you're signed in</h2><button class="btn sm" id="logout-others">Sign out other devices</button></div>
+  <ul class="list mt-1" id="sessions-list"><li class="muted small">Loading…</li></ul>
+</section>
+{% endblock %}

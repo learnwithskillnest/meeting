@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ "Set up your profile" if onboarding else "Edit profile" }} · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div>
+      <h1>{{ "Let's build your profile" if onboarding else "Your profile" }}</h1>
+      <p class="muted">{{ "Takes about 3 minutes. Everything except the basics is optional — and you control who sees what." if onboarding else "Keep it fresh — complete profiles get more matches." }}</p>
+    </div>
+    {% if not onboarding %}
+    <span class="spacer"></span>
+    <a class="btn" href="/u/{{ user.id }}">Preview</a>
+    <a class="btn ghost" href="/settings/account">Settings</a>
+    {% endif %}
+  </div>
+
+  <div id="profile-root" data-onboarding="{{ '1' if onboarding else '' }}">
+    <div class="skeleton sk-lg" aria-hidden="true"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/profile-edit.js"></script>{% endblock %}

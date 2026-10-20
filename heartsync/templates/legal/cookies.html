@@ -1,0 +1,14 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Cookie Policy · {{ settings.brand_name }}{% endblock %}
+{% block legal %}
+<h1>Cookie Policy</h1>
+<p>We use only the cookies needed to run the service. We do not use advertising or third-party tracking cookies.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Name</th><th>Purpose</th><th>Duration</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">hs_session</td><td>Keeps you signed in (HttpOnly, not readable by scripts).</td><td>Up to {{ settings.session_days }} days</td></tr>
+    <tr><td class="mono">hs_csrf</td><td>Security token that protects forms from cross-site request forgery.</td><td>Session</td></tr>
+  </tbody>
+</table></div>
+<p class="mt-1">Your theme choice (light/dark) and search filters are stored in your browser's local storage and never sent to us.</p>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Choose a new password · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card pad-lg auth-card">
+    <h1>Choose a new password</h1>
+    <p class="muted">This signs you out on all other devices.</p>
+    <form data-api="/api/auth/password/reset" novalidate>
+      <input type="hidden" name="token" value="{{ token }}">
+      <div class="field">
+        <label for="password">New password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required>
+        <p class="hint">At least 10 characters, mixing letters with numbers or symbols.</p>
+        <p class="error-text" data-error-for="password" hidden></p>
+      </div>
+      <p class="notice danger" data-form-status hidden></p>
+      <button class="btn primary block mt-1" type="submit">Save password</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

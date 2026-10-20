@@ -1,0 +1,7 @@
+<nav class="tabbar" aria-label="App">
+  <a href="/discover" {% if nav == 'discover' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-compass"/></svg>Discover</a>
+  <a href="/likes" {% if nav == 'likes' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-heart"/></svg>Likes</a>
+  <a href="/chat" {% if nav == 'chat' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-chat"/></svg>Chats<span class="badge hidden" data-count="messages"></span></a>
+  <a href="/notifications" {% if nav == 'notifications' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-bell"/></svg>Alerts<span class="badge hidden" data-count="notifications"></span></a>
+  <a href="/profile" {% if nav == 'profile' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-user"/></svg>Profile</a>
+</nav>

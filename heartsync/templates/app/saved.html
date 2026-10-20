@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Saved profiles · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container" data-page="saved">
+  <div class="page-head"><div><h1>Saved profiles</h1><p class="muted">Your shortlist. Only you can see it.</p></div></div>
+  <div class="grid-cards" id="saved-grid"><div class="mini-card skeleton"></div></div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/cards.js"></script><script src="/static/js/pages.js"></script>{% endblock %}

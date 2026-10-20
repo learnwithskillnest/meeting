@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Subscription & billing · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container" data-page="billing">
+  <div class="page-head"><div><h1>Subscription & billing</h1><p class="muted">Upgrade for more ways to connect. Cancel anytime.</p></div></div>
+  {% if checkout == "success" %}<p class="notice ok mb-1">Payment received. Your plan activates as soon as the payment provider confirms it — usually within seconds. Refresh if it isn't showing yet.</p>{% endif %}
+  {% if checkout == "cancelled" %}<p class="notice mb-1">Checkout was cancelled. You haven't been charged.</p>{% endif %}
+  <div id="billing-root"><div class="skeleton sk-md"></div></div>
+  <p class="small muted mt-15">Subscriptions renew automatically each month until cancelled. Cancelling stops future renewals; you keep premium features until the end of the period you've paid for. See our <a href="/refunds">refund policy</a> and <a href="/terms">terms</a>. Prices include applicable taxes.</p>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/pages.js"></script>{% endblock %}

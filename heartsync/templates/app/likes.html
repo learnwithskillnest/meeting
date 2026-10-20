@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Likes · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container" data-page="likes">
+  <div class="page-head">
+    <div><h1>Likes</h1><p class="muted" id="likes-summary">People who liked you. Like them back to match.</p></div>
+    <span class="spacer"></span>
+    <a class="btn" href="/saved"><svg class="icon"><use href="#i-bookmark"/></svg> Saved</a>
+    <a class="btn" href="/matches">Matches</a>
+  </div>
+  <div id="likes-upsell" hidden class="card mb-15 row between">
+    <div><h3 class="mb-0">See everyone who likes you</h3><p class="muted small mb-0">With HeartSync Plus you can see who liked you and match instantly.</p></div>
+    <a class="btn accent" href="/billing">Upgrade</a>
+  </div>
+  <div class="grid-cards" id="likes-grid"><div class="mini-card skeleton"></div><div class="mini-card skeleton"></div><div class="mini-card skeleton"></div></div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/cards.js"></script><script src="/static/js/pages.js"></script>{% endblock %}

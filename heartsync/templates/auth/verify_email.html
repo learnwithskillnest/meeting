@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Confirm your email · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card pad-lg auth-card">
+    <div class="steps" aria-label="Step 1 of 3"><i class="done"></i><i></i><i></i></div>
+    <h1>Check your inbox</h1>
+    <p>We sent a confirmation link to <strong>{{ user.email }}</strong>. Click it to continue.</p>
+    {% if dev_mode %}<p class="notice dev small">Development mode: open the <a href="/dev/outbox">dev outbox</a> to find the link.</p>{% endif %}
+    <form data-api="/api/auth/verify-email/resend" data-stay data-success="We've sent a new link." class="mt-1">
+      <p class="notice" data-form-status hidden></p>
+      <button class="btn block" type="submit">Resend the email</button>
+    </form>
+    <p class="center small mt-1">Wrong email? <button class="link-btn" data-logout>Sign out</button> and register again.</p>
+  </div>
+</div>
+{% endblock %}

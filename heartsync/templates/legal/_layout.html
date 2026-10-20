@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container prose">
+  <div class="legal-banner" role="note"><strong>Draft for review.</strong> This document was prepared as a starting template and has not been reviewed by a lawyer. It must be reviewed and adapted by qualified counsel for your entity, jurisdictions and actual practices before launch. Its existence does not mean the service is legally compliant.</div>
+  {% block legal %}{% endblock %}
+  <p class="small muted mt-2">Last updated: [DATE]. Operator: [LEGAL ENTITY NAME], [REGISTERED ADDRESS]. Contact: <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.</p>
+</div>
+{% endblock %}
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Settings · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container" data-page="settings-{{ section }}">
+  <div class="page-head"><div><h1>Settings</h1></div></div>
+  <div class="admin-layout">
+    <nav class="admin-nav" aria-label="Settings">
+      <a href="/settings/account" {% if section == 'account' %}aria-current="page"{% endif %}>Account</a>
+      {% if user.can_date %}<a href="/profile">Edit profile</a>{% endif %}
+      {% if user.can_date %}<a href="/settings/privacy" {% if section == 'privacy' %}aria-current="page"{% endif %}>Privacy & safety</a>{% endif %}
+      {% if user.can_date %}<a href="/settings/discovery" {% if section == 'discovery' %}aria-current="page"{% endif %}>Discovery</a>{% endif %}
+      <a href="/settings/notifications" {% if section == 'notifications' %}aria-current="page"{% endif %}>Notifications</a>
+      <a href="/settings/security" {% if section == 'security' %}aria-current="page"{% endif %}>Security</a>
+      <a href="/billing">Subscription</a>
+      <a href="/safety">Safety centre</a>
+      <a href="/help">Help</a>
+    </nav>
+    <div class="stack">{% block settings %}{% endblock %}</div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/pages.js"></script>{% endblock %}

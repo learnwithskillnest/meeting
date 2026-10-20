@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Test checkout · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="auth-wrap" data-page="mock-checkout" data-checkout="{{ checkout.id }}">
+  <div class="card pad-lg auth-card">
+    <p class="notice dev"><strong>Simulated payment — development only.</strong> No money moves and no card details are collected. In production this page is replaced by the real payment provider's hosted checkout.</p>
+    <h1>{{ plan.name }}</h1>
+    <p class="price">{{ plan.price_minor | money(plan.currency) }} <span class="muted">/ {{ plan.interval }}</span></p>
+    <p class="small muted">Completing this simulates a signed webhook from the provider. Premium access is granted only after the server verifies that webhook.</p>
+    <div class="stack">
+      <button class="btn primary block" data-mock="1">Simulate successful payment</button>
+      <button class="btn block" data-mock="0">Simulate declined payment</button>
+      <a class="btn ghost block" href="/billing?checkout=cancelled">Cancel</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/pages.js"></script>{% endblock %}

@@ -1,0 +1,27 @@
+<dialog id="report-dialog" aria-labelledby="report-title">
+  <form id="report-form" method="dialog">
+    <div class="dialog-body stack">
+      <h2 id="report-title">Report <span data-report-name>this member</span></h2>
+      <p class="muted small">Reports are confidential — the other person won't know it was you. If you're in danger, call <strong>112</strong>.</p>
+      <fieldset class="field">
+        <legend class="label">What's happening?</legend>
+        <div class="stack" id="report-categories">
+          {% for key, label in [("fake_profile","Fake profile or impersonation"),("harassment","Harassment or threats"),("inappropriate","Inappropriate or explicit content"),("scam","Scam, money request or spam"),("underage","May be under 18"),("hate","Hate speech or discrimination"),("off_platform","Unwanted calls or messages outside the app"),("offline_behaviour","Behaviour on a date"),("other","Something else")] %}
+          <label class="check"><input type="radio" name="category" value="{{ key }}" required> {{ label }}</label>
+          {% endfor %}
+        </div>
+        <p class="error-text" data-error-for="category" hidden></p>
+      </fieldset>
+      <div class="field">
+        <label for="report-details">Details (optional)</label>
+        <textarea id="report-details" name="details" maxlength="2000" placeholder="Anything that helps our team understand what happened."></textarea>
+      </div>
+      <label class="check"><input type="checkbox" name="block" checked> Also block this person</label>
+      <p class="notice danger" data-form-status hidden></p>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn danger solid">Send report</button>
+    </div>
+  </form>
+</dialog>

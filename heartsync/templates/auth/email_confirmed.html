@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Email confirmation · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card pad-lg auth-card center">
+    {% if success %}
+      <h1>Email confirmed</h1>
+      <p>Thanks! Sign in to continue setting up your profile.</p>
+      <a class="btn primary" href="/login">Sign in</a>
+    {% else %}
+      <h1>This link has expired</h1>
+      <p class="muted">Confirmation links can only be used once and expire after 48 hours. Sign in to request a new one.</p>
+      <a class="btn primary" href="/login">Sign in</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

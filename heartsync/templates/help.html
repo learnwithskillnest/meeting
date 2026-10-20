@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Help & FAQ · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container prose">
+  <h1>{{ content.title if content else "Help & FAQ" }}</h1>
+  {% if content %}{{ content.body | markdown }}{% endif %}
+  <h2>Still need help?</h2>
+  <p>Email us at <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>. For safety concerns, use Report on the member's profile or chat so our team gets the context they need.</p>
+</div>
+{% endblock %}
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

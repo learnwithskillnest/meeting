@@ -1,0 +1,17 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Subscriptions & Refunds · {{ settings.brand_name }}{% endblock %}
+{% block legal %}
+<h1>Subscriptions, Cancellation & Refunds</h1>
+<h2>Renewal</h2>
+<p>Paid plans renew automatically each month at the then-current price until you cancel. We'll show the price and renewal date before you pay and on your Billing page.</p>
+<h2>Cancelling</h2>
+<p>Cancel anytime from <strong>Billing → Cancel subscription</strong>. You won't be charged again, and premium features stay active until the end of the period you've already paid for.</p>
+<h2>Refunds</h2>
+<ul>
+  <li>If you were charged in error or charged after cancelling, contact {{ settings.support_email }} and we'll refund the charge.</li>
+  <li>If your account is removed for breaching our terms, unused time is not refunded except where required by law.</li>
+  <li>Other refund requests are considered case by case and as required by applicable consumer protection law. [Counsel to finalise.]</li>
+</ul>
+<h2>Failed payments</h2>
+<p>If a renewal payment fails we'll notify you and retry. Premium features may be paused until payment succeeds.</p>
+{% endblock %}

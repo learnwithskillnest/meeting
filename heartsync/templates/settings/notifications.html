@@ -1,0 +1,20 @@
+{% extends "settings/_layout.html" %}
+{% block settings %}
+<section class="card">
+  <h2>Notifications</h2>
+  <form id="notif-form" data-api="/api/notifications/preferences" data-method="PUT" data-stay data-success="Notification settings saved" novalidate>
+    <h3 class="mt-1">In the app</h3>
+    <label class="switch"><span>New likes</span><input type="checkbox" name="inapp_likes" role="switch"></label>
+    <label class="switch"><span>New messages</span><input type="checkbox" name="inapp_messages" role="switch"></label>
+    <h3 class="mt-15">Email</h3>
+    <label class="switch"><span>New matches</span><input type="checkbox" name="email_matches" role="switch"></label>
+    <label class="switch"><span>New messages <span class="small muted">(we never include message text)</span></span><input type="checkbox" name="email_messages" role="switch"></label>
+    <label class="switch"><span>Tips and product news</span><input type="checkbox" name="email_marketing" role="switch"></label>
+    <h3 class="mt-15">Quiet hours (IST)</h3>
+    <p class="small muted">No emails during these hours. Safety and account emails are always sent.</p>
+    <div class="range-pair"><input type="time" name="quiet_start" aria-label="Quiet hours start"><span>to</span><input type="time" name="quiet_end" aria-label="Quiet hours end"></div>
+    <p class="notice" data-form-status hidden></p>
+    <button class="btn primary mt-1" type="submit">Save</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Search · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>Search</h1><p class="muted">Filter by what matters to you. Results only include people whose preferences include you, too.</p></div>
+    <span class="spacer"></span>
+    <button class="btn" id="open-filters"><svg class="icon"><use href="#i-sliders"/></svg> Filters <span class="badge hidden" id="filter-count"></span></button>
+  </div>
+
+  <div class="row between mb-1">
+    <div class="row gap-sm" id="active-chips" aria-label="Active filters"></div>
+    <div class="row gap-sm">
+      <label for="sort" class="small">Sort</label>
+      <select id="sort" class="w-auto">
+        <option value="compatibility">Best match</option>
+        <option value="active">Recently active</option>
+        <option value="distance">Distance</option>
+        <option value="newest">Newest</option>
+      </select>
+    </div>
+  </div>
+  <p class="small muted" id="result-count" aria-live="polite"></p>
+  <div class="grid-cards" id="results"></div>
+  <div class="center mt-15"><button class="btn" id="load-more" hidden>Load more</button></div>
+</div>
+
+<dialog class="drawer" id="filters-dialog" aria-labelledby="filters-title">
+  <form id="filters-form" method="dialog">
+    <div class="dialog-body filter-panel">
+      <div class="row between"><h2 id="filters-title" class="mb-0">Filters</h2><button type="button" class="icon-btn" data-close aria-label="Close filters"><svg class="icon"><use href="#i-x"/></svg></button></div>
+      <div id="presets" class="mt-1"></div>
+      <div id="filter-fields"><div class="skeleton sk-md mt-1"></div></div>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="btn ghost" id="clear-filters">Clear all</button>
+      <button type="button" class="btn" id="save-preset">Save preset</button>
+      <button type="submit" class="btn primary" id="apply-filters">Show results</button>
+    </div>
+  </form>
+</dialog>
+{% endblock %}
+{% block scripts %}<script src="/static/js/cards.js"></script><script src="/static/js/search.js"></script>{% endblock %}

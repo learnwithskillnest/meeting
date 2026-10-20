@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container empty">
+  <div class="art"><svg class="icon"><use href="#i-heart"/></svg></div>
+  <h1>{{ title }}</h1>
+  <p>{% if code == 500 %}Our team has been notified. Please try again in a moment.{% else %}The page may have moved, or you may not have access to it.{% endif %}</p>
+  <a class="btn primary" href="/">Go home</a>
+</div>
+{% endblock %}

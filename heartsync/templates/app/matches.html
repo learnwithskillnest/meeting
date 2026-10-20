@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Matches · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container" data-page="matches">
+  <div class="page-head"><div><h1>Your matches</h1><p class="muted">People who liked you back. Start a conversation!</p></div></div>
+  <div class="grid-cards" id="matches-grid"><div class="mini-card skeleton"></div><div class="mini-card skeleton"></div></div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/cards.js"></script><script src="/static/js/pages.js"></script>{% endblock %}

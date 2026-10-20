@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Pricing · {{ settings.brand_name }}{% endblock %}
+{% block description %}{{ settings.brand_name }} is free to join. Optional premium plans unlock unlimited likes, advanced filters and more.{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="center mb-15"><h1>Simple, honest pricing</h1><p class="muted measure">Matching, chatting, blocking and reporting are always free. Premium plans add extra ways to connect — cancel anytime.</p></div>
+  <div class="plans">
+    {% for p in plans %}
+    <div class="card plan {{ 'featured' if p.key == 'plus' else '' }}">
+      <h2 class="h3 mb-0">{{ p.name }}</h2>
+      <div class="price">{% if p.price_minor %}{{ p.price_minor | money(p.currency) }} <small>/ {{ p.interval }}</small>{% else %}Free{% endif %}</div>
+      <ul>
+        <li>{{ "Unlimited likes" if p.daily_likes is none else p.daily_likes ~ " likes per day" }}</li>
+        <li>{{ p.daily_superlikes }} Super Like{{ "s" if p.daily_superlikes > 1 }} per day</li>
+        <li class="{{ '' if p.see_incoming_likes else 'no' }}">See who likes you</li>
+        <li class="{{ '' if p.advanced_filters else 'no' }}">Advanced filters</li>
+        <li class="{{ '' if p.undo else 'no' }}">Undo your last swipe</li>
+        <li class="{{ '' if p.read_receipts else 'no' }}">Read receipts</li>
+        <li class="{{ '' if p.monthly_boosts else 'no' }}">{{ p.monthly_boosts ~ " boosts a month" if p.monthly_boosts else "Profile boosts" }}</li>
+        <li>Chat with all your matches</li>
+        <li>Block, report & safety tools</li>
+      </ul>
+      <a class="btn {{ 'accent' if p.key == 'plus' else 'primary' if p.key == 'premium' else '' }} block" href="{{ '/billing' if user else '/signup' }}">{{ "Get started" if p.key == "free" else "Choose " ~ p.name }}</a>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="small muted center mt-15">Prices in Indian Rupees, inclusive of applicable taxes. Subscriptions renew monthly until cancelled. See our <a href="/refunds">refund policy</a>.</p>
+</div>
+{% endblock %}
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

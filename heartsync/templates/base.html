@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}{{ settings.brand_name }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ settings.brand_name }} — {{ settings.brand_tagline }} A safer, more respectful dating app for adults.{% endblock %}">
+  {% if not public_page %}<meta name="robots" content="noindex, nofollow">{% endif %}
+  <meta name="theme-color" content="#4a1d3f">
+  <meta property="og:title" content="{{ settings.brand_name }}">
+  <meta property="og:description" content="{{ settings.brand_tagline }}">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="stylesheet" href="/brand.css">
+  <script src="/static/js/theme.js"></script>
+</head>
+<body class="{% if user and user.can_date %}app {% endif %}{% block body_class %}{% endblock %}" data-user="{{ user.id if user else '' }}" data-can-date="{{ '1' if user and user.can_date else '' }}" data-staff="{{ '1' if user and user.is_staff else '' }}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% include "partials/icons.html" %}
+  {% block header %}{% include "partials/header.html" %}{% endblock %}
+  {% if dev_mode %}
+  <div class="container"><p class="notice dev small dev-banner" role="note"><strong>Dev mode:</strong> email/SMS go to the <a href="/dev/outbox">dev outbox</a>; payments are simulated.</p></div>
+  {% endif %}
+  <main id="main" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
+  {% block footer %}{% endblock %}
+  {% if user and user.can_date %}{% include "partials/tabbar.html" %}{% endif %}
+  <div class="toasts" role="status" aria-live="polite" id="toasts"></div>
+  <noscript><div class="container"><p class="notice warn">{{ settings.brand_name }} needs JavaScript enabled to work.</p></div></noscript>
+  <script src="/static/js/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

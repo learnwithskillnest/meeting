@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Safety centre · {{ settings.brand_name }}{% endblock %}
+{% block description %}How {{ settings.brand_name }} keeps members safe, and tips for dating safely online and in person.{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><p class="eyebrow">Safety centre</p><h1>Your safety comes first</h1><p class="muted measure">Here's how we protect you, and what you can do to stay safe while dating.</p></div></div>
+  <div class="grid cols-3 mb-15">
+    <div class="card"><h3>{{ "" }}Verified members</h3><p class="small muted">Every member confirms their email and mobile number. Photo verification is reviewed by a person on our team — a badge means a moderator compared a live selfie with the profile photos. It is not an ID check.</p></div>
+    <div class="card"><h3>Private by default</h3><p class="small muted">Your phone number and exact location are never shown. Sensitive details like religion default to matches-only. You choose who sees what.</p></div>
+    <div class="card"><h3>Block & report anytime</h3><p class="small muted">Blocking takes effect immediately everywhere — discovery, chat and number sharing. Reports are confidential and reviewed by our team.</p></div>
+  </div>
+  <div class="prose">
+    {% if content %}{{ content.body | markdown }}{% endif %}
+    <h2>What you can report</h2>
+    <ul>{% for k, v in categories.items() %}<li>{{ v }}</li>{% endfor %}</ul>
+    <p>To report someone, open their profile or your chat and choose <strong>Report</strong>. You can also report a specific message. If someone harasses you by phone after you shared your number, report them with the category "Unwanted calls or messages outside the app", stop sharing your number from the chat menu, and block them.</p>
+  </div>
+</div>
+{% endblock %}
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

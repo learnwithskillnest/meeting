@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Admin · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container" data-section="{{ section }}" data-item="{{ item_id or '' }}" data-admin="{{ '1' if user.is_admin else '' }}" id="admin-root">
+  <div class="page-head"><div><p class="eyebrow">{{ user.role | capitalize }}</p><h1>Moderation & admin</h1></div></div>
+  <div class="admin-layout">
+    <nav class="admin-nav" aria-label="Admin">
+      <a href="/admin" {% if section == 'overview' %}aria-current="page"{% endif %}>Overview</a>
+      <a href="/admin/reports" {% if section in ('reports','report') %}aria-current="page"{% endif %}>Reports</a>
+      <a href="/admin/users" {% if section in ('users','user') %}aria-current="page"{% endif %}>Members</a>
+      <a href="/admin/verifications" {% if section == 'verifications' %}aria-current="page"{% endif %}>Photo verification</a>
+      <a href="/admin/appeals" {% if section == 'appeals' %}aria-current="page"{% endif %}>Appeals</a>
+      <a href="/admin/content" {% if section == 'content' %}aria-current="page"{% endif %}>Help content</a>
+      {% if user.is_admin %}
+      <a href="/admin/subscriptions" {% if section == 'subscriptions' %}aria-current="page"{% endif %}>Subscriptions</a>
+      <a href="/admin/audit" {% if section == 'audit' %}aria-current="page"{% endif %}>Audit log</a>
+      {% endif %}
+    </nav>
+    <div id="admin-main" class="stack"><div class="skeleton sk-md"></div></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/admin.js"></script>{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "settings/_layout.html" %}
+{% block settings %}
+<section class="card">
+  <h2>Visibility</h2>
+  <div id="visibility-toggles"><div class="skeleton sk-sm"></div></div>
+  <p class="small muted mt-1">Control which profile details are visible to everyone or only to matches in <a href="/profile">Edit profile → Who sees what</a>.</p>
+</section>
+<section class="card">
+  <h2>Blocked members</h2>
+  <ul class="list" id="blocked-list"><li class="muted small">Loading…</li></ul>
+</section>
+<section class="card">
+  <h2>Your reports</h2>
+  <ul class="list" id="reports-list"><li class="muted small">Loading…</li></ul>
+</section>
+{% endblock %}

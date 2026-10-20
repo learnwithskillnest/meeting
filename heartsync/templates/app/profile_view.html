@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Profile · {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <p><button type="button" class="link-btn small" data-back>← Back</button></p>
+  <div id="profile-view" data-id="{{ target_id }}" data-self="{{ '1' if target_id == user.id else '' }}">
+    <div class="profile-layout"><div class="skeleton sk-lg"></div><div class="skeleton sk-lg"></div></div>
+  </div>
+</div>
+{% include "partials/report_dialog.html" %}
+<dialog id="match-dialog" aria-labelledby="match-title">
+  <div class="match-burst"><h2 id="match-title">It's a match!</h2><div class="pair" id="match-pair"></div><p id="match-text"></p></div>
+  <div class="dialog-actions"><button class="btn" id="match-keep">Close</button><a class="btn accent" id="match-chat" href="/chat">Send a message</a></div>
+</dialog>
+{% endblock %}
+{% block scripts %}<script src="/static/js/cards.js"></script><script src="/static/js/safety-actions.js"></script><script src="/static/js/profile-view.js"></script>{% endblock %}

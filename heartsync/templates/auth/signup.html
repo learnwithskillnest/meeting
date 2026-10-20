@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Join {{ settings.brand_name }}{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card pad-lg auth-card">
+    <h1>Create your account</h1>
+    <p class="muted">Free to join. You must be 18 or older.</p>
+    <form data-api="/api/auth/signup" data-next="/verify-email" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <p class="error-text" id="err-email" data-error-for="email" hidden></p>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" minlength="10" required aria-describedby="pw-hint">
+        <p class="hint" id="pw-hint">At least 10 characters, mixing letters with numbers or symbols.</p>
+        <p class="error-text" id="err-password" data-error-for="password" hidden></p>
+      </div>
+      <div class="field">
+        <label for="dob">Date of birth</label>
+        <input id="dob" name="date_of_birth" type="date" required autocomplete="bday">
+        <p class="hint">Used only to confirm you're an adult and show your age. Your birthday is never shown.</p>
+        <p class="error-text" id="err-dob" data-error-for="date_of_birth" hidden></p>
+      </div>
+      <div class="field">
+        <label class="check"><input type="checkbox" name="confirm_adult" required> I confirm I am 18 years of age or older.</label>
+      </div>
+      <div class="field">
+        <label class="check"><input type="checkbox" name="accept_terms" required> I agree to the <a href="/terms" target="_blank">Terms</a>, <a href="/privacy" target="_blank">Privacy Policy</a> and <a href="/guidelines" target="_blank">Community Guidelines</a>.</label>
+        <p class="error-text" id="err-terms" data-error-for="accept_terms" hidden></p>
+      </div>
+      <p class="notice danger" data-form-status hidden></p>
+      <button class="btn primary block mt-1" type="submit">Create account</button>
+    </form>
+    <p class="center small mt-1">Already a member? <a href="/login">Sign in</a></p>
+  </div>
+</div>
+{% endblock %}

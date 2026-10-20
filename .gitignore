@@ -1,0 +1,27 @@
+# Secrets & local config
+.env
+.env.*
+!.env.example
+
+# Runtime data (database, uploaded media, dev secret)
+var/
+*.db
+*.db-wal
+*.db-shm
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Node / e2e artifacts
+node_modules/
+e2e/test-results/
+e2e/report/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

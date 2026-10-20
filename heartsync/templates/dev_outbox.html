@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Dev outbox{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><h1>Development outbox</h1><p class="muted">Messages that would have been sent by email/SMS. Only available when APP_ENV is development or test.</p></div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>When</th><th>Channel</th><th>To</th><th>Message</th></tr></thead>
+      <tbody>
+      {% for m in items %}
+        <tr><td class="nowrap small">{{ m.created_at[:19].replace('T', ' ') }}</td><td>{{ m.channel }}</td><td class="mono">{{ m.recipient }}</td>
+          <td>{% if m.subject %}<strong>{{ m.subject }}</strong><br>{% endif %}<span class="pre small">{{ m.body | urlize }}</span></td></tr>
+      {% else %}
+        <tr><td colspan="4" class="muted">Nothing yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

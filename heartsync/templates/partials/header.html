@@ -1,0 +1,35 @@
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="/" aria-label="{{ settings.brand_name }} home">
+      <svg class="brand-mark" aria-hidden="true"><use href="#i-logo"/></svg>
+      <span>{{ settings.brand_name }}</span>
+    </a>
+    {% if user and user.can_date %}
+    <nav class="nav-links" aria-label="Main">
+      <a href="/discover" {% if nav == 'discover' %}aria-current="page"{% endif %}>Discover</a>
+      <a href="/likes" {% if nav == 'likes' %}aria-current="page"{% endif %}>Likes</a>
+      <a href="/chat" {% if nav == 'chat' %}aria-current="page"{% endif %}>Chats <span class="badge hidden" data-count="messages"></span></a>
+      <a href="/profile" {% if nav == 'profile' %}aria-current="page"{% endif %}>Profile</a>
+      {% if user.is_staff %}<a href="/admin">Admin</a>{% endif %}
+    </nav>
+    <span class="spacer"></span>
+    <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle dark mode"><svg class="icon"><use href="#i-moon"/></svg></button>
+    <a class="icon-btn" href="/notifications" aria-label="Notifications"><svg class="icon"><use href="#i-bell"/></svg><span class="badge hidden" data-count="notifications"></span></a>
+    {% elif user %}
+    <span class="spacer"></span>
+    {% if user.is_staff %}<a class="btn ghost sm" href="/admin">Admin</a>{% endif %}
+    <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle dark mode"><svg class="icon"><use href="#i-moon"/></svg></button>
+    <button class="btn sm" type="button" data-logout>Sign out</button>
+    {% else %}
+    <nav class="nav-links" aria-label="Main">
+      <a href="/safety">Safety</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/help">Help</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle dark mode"><svg class="icon"><use href="#i-moon"/></svg></button>
+    <a class="btn ghost sm" href="/login">Sign in</a>
+    <a class="btn primary sm" href="/signup">Join free</a>
+    {% endif %}
+  </div>
+</header>

@@ -1,0 +1,39 @@
+{% extends "settings/_layout.html" %}
+{% block settings %}
+<section class="card stack">
+  <h2>Account</h2>
+  <dl class="facts">
+    <div class="fact"><dt>Email</dt><dd>{{ user.email }} {% if user.email_verified %}<span class="tag verified">Verified</span>{% endif %}</dd></div>
+    <div class="fact"><dt>Phone</dt><dd id="phone-masked">{{ "Verified" if user.phone_verified else "Not verified" }}</dd></div>
+  </dl>
+  <div class="row"><a class="btn sm" href="/verify-phone?change=1">{{ "Change phone number" if user.phone_verified else "Verify phone" }}</a></div>
+  <p class="small muted">Your phone number is never shown on your profile or in search.</p>
+</section>
+
+<section class="card stack">
+  <h2>Your data</h2>
+  <p class="muted small">Download a copy of the personal data we hold about you (JSON).</p>
+  <div><a class="btn sm" href="/api/account/export">Download my data</a></div>
+</section>
+
+{% if user.status == 'active' %}
+<section class="card stack">
+  <h2>Take a break</h2>
+  <p class="muted small">Deactivating hides your profile and signs you out everywhere. Sign back in any time to reactivate. Your matches and messages are kept.</p>
+  <div><button class="btn sm" id="deactivate-btn">Deactivate account</button></div>
+</section>
+{% endif %}
+
+<section class="card stack">
+  <h2>Delete account</h2>
+  <p class="muted small">This permanently deletes your profile, photos, likes and contact details, ends your matches, and removes your messages' content. Some records are kept in anonymised form for safety and legal reasons — see our <a href="/privacy">privacy policy</a>. Cancel any subscription first to avoid future charges.</p>
+  <form data-api="/api/account/delete" id="delete-form" novalidate>
+    <div class="grid cols-2">
+      <div class="field"><label for="del-pw">Password</label><input id="del-pw" name="password" type="password" autocomplete="current-password" required><p class="error-text" data-error-for="password" hidden></p></div>
+      <div class="field"><label for="del-confirm">Type DELETE to confirm</label><input id="del-confirm" name="confirm" autocomplete="off" required><p class="error-text" data-error-for="confirm" hidden></p></div>
+    </div>
+    <p class="notice danger" data-form-status hidden></p>
+    <button class="btn danger solid mt-1" type="submit">Permanently delete my account</button>
+  </form>
+</section>
+{% endblock %}
