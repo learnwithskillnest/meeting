@@ -28,6 +28,8 @@ def _load_dotenv(path: Path) -> None:
         value = value.strip()
         if value[:1] in ("'", '"'):
             value = value[1:].split(value[0], 1)[0]
+        elif value == "#" or value.startswith(("# ", "#\t")):
+            value = ""  # "KEY=   # comment" means empty, never the comment text
         else:
             value = value.split(" #", 1)[0].strip()  # allow trailing comments
         os.environ.setdefault(key, value)

@@ -190,3 +190,54 @@ class ProductionConfigTests(unittest.TestCase):
     def test_payments_can_be_disabled_in_production(self):
         from heartsync.config import Settings
         Settings(**{**self.BASE, "payment_provider": "none"})
+
+
+class DotenvTests(unittest.TestCase):
+    def test_parsing(self):
+        import os
+        import tempfile
+        from pathlib import Path
+        from heartsync.config import _load_dotenv
+        body = ("HS_T_EMPTY=                 # REQUIRED in production: 32+ chars\n"
+                "HS_T_PLAIN=value   # note\n"
+                "HS_T_HASH=#4a1d3f\n"
+                "HS_T_QUOTED='a # b'\n"
+                "HS_T_SPACES=HeartSync <no-reply@example.com>\n")
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / ".env"
+            p.write_text(body)
+            keys = ["HS_T_EMPTY", "HS_T_PLAIN", "HS_T_HASH", "HS_T_QUOTED", "HS_T_SPACES"]
+            for k in keys:
+                os.environ.pop(k, None)
+            try:
+                _load_dotenv(p)
+                self.assertEqual(os.environ["HS_T_EMPTY"], "")
+                self.assertEqual(os.environ["HS_T_PLAIN"], "value")
+                self.assertEqual(os.environ["HS_T_HASH"], "#4a1d3f")
+                self.assertEqual(os.environ["HS_T_QUOTED"], "a # b")
+                self.assertEqual(os.environ["HS_T_SPACES"], "HeartSync <no-reply@example.com>")
+            finally:
+                for k in keys:
+                    os.environ.pop(k, None)
+
+    def test_env_example_has_no_secret_values(self):
+        import os
+        import tempfile
+        from pathlib import Path
+        from heartsync.config import BASE_DIR, _load_dotenv
+        text = (BASE_DIR / ".env.example").read_text()
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / ".env"
+            p.write_text(text)
+            secret_keys = ["SECRET_KEY", "TWILIO_AUTH_TOKEN", "SMTP_PASSWORD", "STRIPE_SECRET_KEY",
+                           "STRIPE_WEBHOOK_SECRET", "ANTHROPIC_API_KEY", "ADMIN_PASSWORD", "MFA_ENCRYPTION_KEY"]
+            saved = {k: os.environ.pop(k, None) for k in secret_keys}
+            try:
+                _load_dotenv(p)
+                for k in secret_keys:
+                    self.assertEqual(os.environ.get(k, ""), "", k)
+            finally:
+                for k, v in saved.items():
+                    os.environ.pop(k, None)
+                    if v is not None:
+                        os.environ[k] = v
