@@ -55,6 +55,9 @@ def _path_for(key: str) -> Path:
     return path
 
 
+MAX_PIXELS = Image.MAX_IMAGE_PIXELS  # Pillow only *errors* above 2x this; we refuse at 1x
+
+
 def process_image(data: bytes, max_bytes: int | None = None) -> tuple[bytes, int, int]:
     max_bytes = max_bytes or get_settings().max_upload_bytes
     if not data:
@@ -64,8 +67,15 @@ def process_image(data: bytes, max_bytes: int | None = None) -> tuple[bytes, int
     try:
         with Image.open(io.BytesIO(data)) as probe:
             fmt = probe.format
+            w, h = probe.size
+            # Small files can still decode to huge bitmaps ("decompression bombs"):
+            # refuse from the header, before any pixel data is processed.
+            if w * h > MAX_PIXELS:
+                raise UploadRejected("That image's dimensions are too large. Please use a photo under 40 megapixels.")
             probe.verify()
-    except (UnidentifiedImageError, OSError, Image.DecompressionBombError, SyntaxError):
+    except Image.DecompressionBombError:
+        raise UploadRejected("That image's dimensions are too large. Please use a photo under 40 megapixels.")
+    except (UnidentifiedImageError, OSError, SyntaxError):
         raise UploadRejected("That file isn't a supported image (JPEG, PNG or WebP).")
     if fmt not in ALLOWED_FORMATS:
         raise UploadRejected("Only JPEG, PNG and WebP images are allowed.")

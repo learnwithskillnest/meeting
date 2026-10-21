@@ -192,3 +192,27 @@ class AdminEscalationTests(AppTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DecompressionBombTests(AppTestCase):
+    def test_huge_dimension_image_rejected_before_decoding(self):
+        import io
+        import struct
+        import zlib
+        from heartsync.providers import storage
+        def chunk(t, d):
+            return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
+
+        def fake_png(w, h):  # header claims w x h; body is tiny
+            return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 1, 0, 0, 0, 0)) +
+                    chunk(b"IDAT", zlib.compress(b"\x00" * 1000)) + chunk(b"IEND", b""))
+        # 49 MP: above our cap but below Pillow's hard error (80 MP), which used to be decoded.
+        # 100 MP: Pillow's own guard. Both refused with the same clear message.
+        for w, h in ((7000, 7000), (10000, 10000)):
+            png = fake_png(w, h)
+            self.assertLess(len(png), 10_000)
+            with self.assertRaisesRegex(storage.UploadRejected, "dimensions are too large"):
+                storage.process_image(png)
+        u = self.woman("u@example.com")
+        r = u.req("POST", "/api/profile/photos", files={"file": ("bomb.png", io.BytesIO(fake_png(7000, 7000)), "image/png")})
+        self.assertEqual(r.status_code, 400)
