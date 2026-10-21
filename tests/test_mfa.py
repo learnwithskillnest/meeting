@@ -152,3 +152,30 @@ class MfaFlowTests(AppTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class StaffMfaPolicyTests(AppTestCase):
+    def setUp(self):
+        super().setUp()
+        self.settings().require_staff_mfa = True
+        self.admin = self.woman("admin@example.com")
+        self.make_staff(self.admin, "admin")
+
+    def test_staff_without_mfa_blocked_from_admin_api_and_pages(self):
+        r = self.admin.get("/api/admin/metrics")
+        self.assertEqual(r.status_code, 403)
+        self.assertEqual(r.json()["error"]["code"], "staff_mfa_required")
+        r = self.admin.c.get("/admin", follow_redirects=False)
+        self.assertEqual(r.status_code, 303)
+        self.assertIn("/settings/security", r.headers["location"])
+
+    def test_staff_with_mfa_allowed(self):
+        r = self.admin.post("/api/auth/mfa/setup", {"password": PASSWORD})
+        secret = r.json()["data"]["secret"]
+        self.admin.post("/api/auth/mfa/enable", {"code": _code(secret)})
+        self.assertEqual(self.admin.get("/api/admin/metrics").status_code, 200)
+        self.assertEqual(self.admin.c.get("/admin", follow_redirects=False).status_code, 200)
+
+    def test_policy_defaults(self):
+        from heartsync.config import Settings
+        self.assertFalse(Settings(app_env="test", secret_key="x" * 40, database_path=":memory:").require_staff_mfa)

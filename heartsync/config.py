@@ -150,6 +150,10 @@ class Settings:
     require_phone_verification: bool = field(
         default_factory=lambda: env_bool("REQUIRE_PHONE_VERIFICATION", True)
     )
+    # Staff (moderators/admins) must have two-factor sign-in before using admin tools.
+    # Defaults to on in production; set REQUIRE_STAFF_MFA=false to opt out.
+    require_staff_mfa: bool | None = field(
+        default_factory=lambda: env_bool("REQUIRE_STAFF_MFA", False) if env("REQUIRE_STAFF_MFA") else None)
     min_age: int = 18
     max_upload_bytes: int = field(default_factory=lambda: env_int("MAX_UPLOAD_BYTES", 8 * 1024 * 1024))
     max_photos: int = 6
@@ -159,6 +163,8 @@ class Settings:
     plans: dict = field(default_factory=lambda: json.loads(env("PLANS_JSON")) if env("PLANS_JSON") else DEFAULT_PLANS)
 
     def __post_init__(self) -> None:
+        if self.require_staff_mfa is None:
+            self.require_staff_mfa = self.is_production
         if self.is_production:
             missing = [k for k in ("secret_key",) if not getattr(self, k)]
             if missing or len(self.secret_key) < 32:

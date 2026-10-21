@@ -1,5 +1,6 @@
 {% extends "settings/_layout.html" %}
 {% block settings %}
+{% if request.query_params.get('staff_mfa') %}<p class="notice danger" role="alert">Admin tools need two-factor sign-in. Turn it on below, then open Admin again.</p>{% endif %}
 <section class="card">
   <h2>Change password</h2>
   <form data-api="/api/auth/password/change" data-stay data-success="Password changed. Other devices have been signed out." novalidate>

@@ -115,6 +115,8 @@ def page(path: str, auth: str = "public"):
                 return error_page(request, 404)
             if auth == "admin" and not user.is_admin:
                 return error_page(request, 404)
+            if auth in ("staff", "admin") and get_settings().require_staff_mfa and not user.mfa_enabled:
+                return redirect("/settings/security?staff_mfa=1")
             return await fn(request)
         routes.append(Route(path, endpoint, methods=["GET"]))
         return endpoint

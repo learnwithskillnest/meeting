@@ -122,6 +122,8 @@ def user_detail(conn: sqlite3.Connection, user_id: str) -> dict:
         # Admins see a masked number only; full numbers are never displayed.
         "phone": mask_phone(c["phone_e164"]) if c and c["phone_e164"] else None,
         "phone_verified": bool(c and c["phone_verified_at"]),
+        "mfa_enabled": bool(dbm.scalar(conn, "SELECT 1 FROM user_mfa WHERE user_id=? AND enabled_at IS NOT NULL",
+                                       (user_id,))),
         "profile": {k: p[k] for k in ("display_name", "headline", "about", "city", "gender", "visibility",
                                       "photo_verified", "completeness", "onboarded_at")} if p else None,
         "photos": photos,

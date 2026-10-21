@@ -184,7 +184,8 @@ def load_session(conn: sqlite3.Connection, token: str | None) -> CurrentUser | N
     row = dbm.one(
         conn,
         "SELECT s.id AS sid, s.csrf_token, s.expires_at, s.last_seen_at, u.id, u.email, u.role, u.status,"
-        " u.email_verified_at, u.date_of_birth, u.last_active_at, c.phone_verified_at, p.onboarded_at, p.display_name"
+        " u.email_verified_at, u.date_of_birth, u.last_active_at, c.phone_verified_at, p.onboarded_at, p.display_name,"
+        " (SELECT 1 FROM user_mfa m WHERE m.user_id=u.id AND m.enabled_at IS NOT NULL) AS mfa_on"
         " FROM sessions s JOIN users u ON u.id=s.user_id"
         " LEFT JOIN user_contacts c ON c.user_id=u.id LEFT JOIN profiles p ON p.user_id=u.id"
         " WHERE s.token_hash=? AND s.revoked_at IS NULL",
@@ -201,7 +202,7 @@ def load_session(conn: sqlite3.Connection, token: str | None) -> CurrentUser | N
         id=row["id"], email=row["email"], role=row["role"], status=row["status"],
         email_verified=bool(row["email_verified_at"]), phone_verified=bool(row["phone_verified_at"]),
         onboarded=bool(row["onboarded_at"]), display_name=row["display_name"], session_id=row["sid"],
-        csrf_token=row["csrf_token"], date_of_birth=row["date_of_birth"],
+        csrf_token=row["csrf_token"], date_of_birth=row["date_of_birth"], mfa_enabled=bool(row["mfa_on"]),
     )
 
 

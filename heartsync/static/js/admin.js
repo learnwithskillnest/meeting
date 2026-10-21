@@ -52,7 +52,7 @@
           <p class="small muted mb-0">${esc(u.email)} · ${esc(u.id)}</p></div>${status(u.status)}</div>
           <dl class="facts mt-1">
             <div class="fact"><dt>Role</dt><dd>${esc(u.role)}</dd></div><div class="fact"><dt>Plan</dt><dd>${esc(d.plan)}</dd></div>
-            <div class="fact"><dt>Email verified</dt><dd>${u.email_verified_at ? "Yes" : "No"}</dd></div><div class="fact"><dt>Phone</dt><dd>${esc(d.phone || "—")} ${d.phone_verified ? "(verified)" : ""}</dd></div>
+            <div class="fact"><dt>Email verified</dt><dd>${u.email_verified_at ? "Yes" : "No"}</dd></div><div class="fact"><dt>Phone</dt><dd>${esc(d.phone || "—")} ${d.phone_verified ? "(verified)" : ""}</dd></div><div class="fact"><dt>Two-factor</dt><dd>${d.mfa_enabled ? "On" : "Off"}</dd></div>
             <div class="fact"><dt>Photo verified</dt><dd>${d.profile && d.profile.photo_verified ? "Yes" : "No"}</dd></div><div class="fact"><dt>Joined</dt><dd>${date(u.created_at)}</dd></div>
             <div class="fact"><dt>Last active</dt><dd>${date(u.last_active_at)}</dd></div><div class="fact"><dt>Reports made</dt><dd>${d.reports_made}</dd></div>
           </dl>

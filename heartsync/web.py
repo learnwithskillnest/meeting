@@ -111,6 +111,7 @@ class CurrentUser:
     session_id: str
     csrf_token: str
     date_of_birth: str
+    mfa_enabled: bool = False
 
     @property
     def is_admin(self) -> bool:
@@ -177,6 +178,10 @@ def require_staff(request: Request) -> CurrentUser:
         raise APIError(401, "unauthenticated", "Please sign in.")
     if not user.is_staff or user.status != "active":
         raise forbidden()
+    if get_settings().require_staff_mfa and not user.mfa_enabled:
+        raise APIError(403, "staff_mfa_required",
+                       "Turn on two-factor sign-in in Settings → Security to use admin tools.",
+                       {"next": "/settings/security"})
     return user
 
 
