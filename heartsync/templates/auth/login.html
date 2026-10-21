@@ -17,6 +17,18 @@
       <p class="notice danger" data-form-status hidden></p>
       <button class="btn primary block mt-1" type="submit">Sign in</button>
     </form>
+    <form data-api="/api/auth/mfa/verify" data-allow401 {% if next %}data-next="{{ next }}"{% endif %} id="mfa-form" hidden novalidate>
+      <h2 class="h3 mt-0">Two-factor check</h2>
+      <p class="muted small">Enter the 6-digit code from your authenticator app, or one of your recovery codes.</p>
+      <div class="field">
+        <label for="mfa-code">Code</label>
+        <input id="mfa-code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="20" required>
+        <p class="error-text" data-error-for="code" hidden></p>
+      </div>
+      <p class="notice danger" data-form-status hidden></p>
+      <button class="btn primary block mt-1" type="submit">Verify and sign in</button>
+      <p class="center small mt-1"><a href="/login">Start over</a></p>
+    </form>
     <p class="center small mt-1"><a href="/forgot-password">Forgot your password?</a></p>
     <p class="center small">New here? <a href="/signup">Create an account</a></p>
   </div>

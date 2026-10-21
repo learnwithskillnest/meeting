@@ -11,8 +11,49 @@
     <button class="btn primary mt-1" type="submit">Update password</button>
   </form>
 </section>
+<section class="card" id="mfa-card">
+  <div class="row between"><h2 class="mb-0">Two-factor sign-in</h2><span class="tag" id="mfa-state">Checking…</span></div>
+  <p class="muted">Ask for a code from an authenticator app (such as Google Authenticator, Microsoft Authenticator or 1Password) each time you sign in, so a stolen password isn't enough.</p>
+  <div id="mfa-off" hidden>
+    <form id="mfa-start" novalidate>
+      <div class="field"><label for="mfa-pw">Confirm your password</label><input id="mfa-pw" name="password" type="password" autocomplete="current-password" required><p class="error-text" data-error-for="password" hidden></p></div>
+      <button class="btn primary" type="submit">Set up two-factor sign-in</button>
+    </form>
+    <div id="mfa-setup" hidden>
+      <ol class="steps-list">
+        <li>In your authenticator app, add an account and choose <strong>enter a setup key</strong> (or <a id="mfa-link" href="#">open it in your app</a> on this phone).</li>
+        <li>Enter this key, time-based: <code class="mono" id="mfa-secret"></code> <button class="btn sm" type="button" id="mfa-copy">Copy</button></li>
+        <li>Type the 6-digit code the app shows.</li>
+      </ol>
+      <form id="mfa-confirm" novalidate>
+        <div class="field"><label for="mfa-first">Code from your app</label><input id="mfa-first" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required><p class="error-text" data-error-for="code" hidden></p></div>
+        <button class="btn primary" type="submit">Turn on</button>
+      </form>
+    </div>
+  </div>
+  <div id="mfa-on" hidden>
+    <p><span id="mfa-remaining"></span> recovery codes left. Each works once if you lose your phone.</p>
+    <div class="row gap-sm">
+      <button class="btn sm" type="button" id="mfa-regen">New recovery codes</button>
+      <button class="btn sm danger" type="button" id="mfa-off-btn">Turn off</button>
+    </div>
+    <form id="mfa-disable" class="mt-1" hidden novalidate>
+      <div class="grid cols-2">
+        <div class="field"><label for="mfa-dpw">Password</label><input id="mfa-dpw" name="password" type="password" autocomplete="current-password" required><p class="error-text" data-error-for="password" hidden></p></div>
+        <div class="field"><label for="mfa-dcode">Authenticator or recovery code</label><input id="mfa-dcode" name="code" autocomplete="one-time-code" maxlength="20" required><p class="error-text" data-error-for="code" hidden></p></div>
+      </div>
+      <button class="btn danger" type="submit">Turn off two-factor sign-in</button>
+    </form>
+  </div>
+  <div id="mfa-codes" class="notice ok mt-1" hidden>
+    <p><strong>Save these recovery codes now.</strong> They won't be shown again.</p>
+    <pre class="pre mono" id="mfa-code-list"></pre>
+    <button class="btn sm" type="button" id="mfa-codes-copy">Copy codes</button>
+  </div>
+</section>
 <section class="card">
   <div class="row between"><h2 class="mb-0">Where you're signed in</h2><button class="btn sm" id="logout-others">Sign out other devices</button></div>
   <ul class="list mt-1" id="sessions-list"><li class="muted small">Loading…</li></ul>
 </section>
 {% endblock %}
+{% block scripts %}{{ super() }}<script src="/static/js/mfa.js"></script>{% endblock %}

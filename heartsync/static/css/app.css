@@ -199,6 +199,7 @@ main { padding-block: 1.5rem 3rem; }
 /* ---------------------------------------------------------------- forms */
 .field { display: grid; gap: .35rem; }
 .field + .field { margin-top: 1rem; }
+.grid > .field + .field { margin-top: 0; }
 label, .label { font-weight: 600; font-size: .92rem; color: var(--ink-2); }
 .hint { font-size: .82rem; color: var(--muted); }
 .error-text { font-size: .85rem; color: var(--red-600); font-weight: 500; }
@@ -556,3 +557,6 @@ select.w-auto { width: auto; min-height: 38px; padding: .35rem 2rem .35rem .7rem
   .discover-page .actions + p { display: none; }
 }
 .btn { white-space: nowrap; }
+.steps-list { padding-left: 1.25rem; display: grid; gap: .5rem; margin: 1rem 0; }
+.steps-list code { background: var(--surface-2); padding: .15rem .4rem; border-radius: 6px; letter-spacing: .04em; }
+#mfa-code-list { columns: 2; font-size: .95rem; margin: .5rem 0; }

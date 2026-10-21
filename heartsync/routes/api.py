@@ -18,7 +18,7 @@ from .. import security
 from ..config import get_settings
 from ..providers import payments, storage
 from ..realtime import hub
-from ..services import accounts, admin, billing, chat, discovery, matching, phone, profiles, safety
+from ..services import accounts, admin, billing, chat, discovery, matching, mfa, phone, profiles, safety
 from ..services.notifications import get_prefs, set_prefs, unread_count
 from ..web import (APIError, bad_request, client_ip, error_response, get_db, not_found, ok, parse,
                    require_admin, require_dating, require_staff, require_user, too_many)
@@ -108,11 +108,99 @@ async def login(request: Request):
     uid = accounts.authenticate(conn, body.email, body.password)
     if not uid:
         raise APIError(401, "invalid_credentials", "Email or password is incorrect.")
+    if mfa.is_enabled(conn, uid):
+        # Password is right but no session yet: the second factor comes first.
+        challenge = mfa.start_challenge(conn, uid)
+        resp = ok({"mfa_required": True})
+        s = get_settings()
+        resp.set_cookie(MFA_COOKIE, challenge, max_age=mfa.CHALLENGE_MINUTES * 60, httponly=True,
+                        secure=s.cookie_secure, samesite="strict", path="/api/auth/mfa")
+        return resp
+    return _finish_login(request, conn, uid, ip)
+
+
+MFA_COOKIE = "hs_mfa"
+
+
+def _finish_login(request: Request, conn, uid: str, ip: str) -> Response:
     token, _ = accounts.create_session(conn, uid, request.headers.get("user-agent"), security.hash_ip(ip))
     user = accounts.load_session(conn, token)
     resp = ok({"next": (user.next_step() if user else None) or "/discover"})
     _set_session_cookie(resp, token)
     return resp
+
+
+class MfaCodeIn(BaseModel):
+    code: str = Field(min_length=1, max_length=20)
+
+
+class MfaPasswordIn(BaseModel):
+    password: str = Field(max_length=200)
+
+
+class MfaDisableIn(BaseModel):
+    password: str = Field(max_length=200)
+    code: str = Field(min_length=1, max_length=20)
+
+
+@api("/api/auth/mfa/verify", ["POST"])
+async def mfa_verify(request: Request):
+    body = await parse(request, MfaCodeIn)
+    ip = client_ip(request)
+    if not security.allow("mfa_verify", ip):
+        raise too_many("Too many attempts. Please wait a few minutes.")
+    conn = get_db(request)
+    uid, _method = mfa.complete_challenge(conn, request.cookies.get(MFA_COOKIE), body.code)
+    resp = _finish_login(request, conn, uid, ip)
+    resp.delete_cookie(MFA_COOKIE, path="/api/auth/mfa")
+    return resp
+
+
+@api("/api/auth/mfa", ["GET"])
+async def mfa_status(request: Request):
+    user = require_user(request)
+    return ok(mfa.status(get_db(request), user.id))
+
+
+@api("/api/auth/mfa/setup", ["POST"])
+async def mfa_setup(request: Request):
+    user = require_user(request)
+    body = await parse(request, MfaPasswordIn)
+    if not security.allow("mfa_manage", user.id):
+        raise too_many()
+    return ok(mfa.begin_setup(get_db(request), user, body.password))
+
+
+@api("/api/auth/mfa/enable", ["POST"])
+async def mfa_enable(request: Request):
+    user = require_user(request)
+    body = await parse(request, MfaCodeIn)
+    if not security.allow("mfa_manage", user.id):
+        raise too_many()
+    conn = get_db(request)
+    codes = mfa.confirm_setup(conn, user, body.code)
+    # Turning on 2FA signs out every other device.
+    accounts.revoke_other_sessions(conn, user.id, user.session_id)
+    return ok({"recovery_codes": codes})
+
+
+@api("/api/auth/mfa/disable", ["POST"])
+async def mfa_disable(request: Request):
+    user = require_user(request)
+    body = await parse(request, MfaDisableIn)
+    if not security.allow("mfa_manage", user.id):
+        raise too_many()
+    mfa.disable(get_db(request), user, body.password, body.code)
+    return ok()
+
+
+@api("/api/auth/mfa/recovery-codes", ["POST"])
+async def mfa_recovery(request: Request):
+    user = require_user(request)
+    body = await parse(request, MfaPasswordIn)
+    if not security.allow("mfa_manage", user.id):
+        raise too_many()
+    return ok({"recovery_codes": mfa.regenerate_recovery_codes(get_db(request), user, body.password)})
 
 
 @api("/api/auth/logout", ["POST"])

@@ -144,6 +144,8 @@ LIMITS = {
     "otp_send": (5, 3600),
     "otp_send_phone": (3, 900),
     "otp_verify": (10, 900),
+    "mfa_verify": (20, 900),
+    "mfa_manage": (20, 900),
     "swipe": (120, 60),
     "message": (30, 60),
     "upload": (20, 600),
