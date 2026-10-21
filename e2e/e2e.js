@@ -26,6 +26,20 @@ function tinyJpeg(path) {
   fs.writeFileSync(path, Buffer.from(b64, "base64"));
 }
 
+// RFC 6238 TOTP (SHA-1, 6 digits, 30 s) for the two-factor step.
+function totp(secretB32, offsetSteps = 0) {
+  const crypto = require("crypto");
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  let bits = "";
+  for (const ch of secretB32.replace(/\s|=/g, "").toUpperCase()) bits += alphabet.indexOf(ch).toString(2).padStart(5, "0");
+  const key = Buffer.from(bits.match(/.{8}/g).map((b) => parseInt(b, 2)));
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 30000) + offsetSteps));
+  const h = crypto.createHmac("sha1", key).update(counter).digest();
+  const o = h[h.length - 1] & 15;
+  return String((h.readUInt32BE(o) & 0x7fffffff) % 1000000).padStart(6, "0");
+}
+
 async function login(page, email) {
   await page.goto(BASE + "/login");
   await page.fill("#email", email);
@@ -207,6 +221,36 @@ async function outboxLatest(page, recipient, re) {
     await b.getByRole("button", { name: "Block" }).last().click();
     await b.waitForURL(/\/chat$/);
     await b.locator("#conv-list").filter({ hasText: /No chats yet/ }).waitFor();
+  });
+
+  await step("profile writing help drafts a labelled suggestion", async () => {
+    await a.goto(BASE + "/profile");
+    await a.click("[data-assist=bio]");
+    await a.locator(".assist-draft").waitFor();
+    await a.click("[data-use-draft]");
+    assert((await a.inputValue("#f-about")).length > 20, "draft not inserted");
+  });
+
+  await step("two-factor sign-in: enrol, then sign in with a code", async () => {
+    await a.goto(BASE + "/settings/security");
+    await a.fill("#mfa-pw", PASSWORD);
+    await a.click("#mfa-start button[type=submit]");
+    await a.locator("#mfa-setup:not([hidden])").waitFor();
+    const secret = (await a.textContent("#mfa-secret")).replace(/\s/g, "");
+    await a.fill("#mfa-first", totp(secret));
+    await a.click("#mfa-confirm button[type=submit]");
+    await a.locator("#mfa-codes:not([hidden])").waitFor();
+    const fresh = await (await browser.newContext()).newPage();
+    watch(fresh);
+    const aEmail = await a.evaluate(() => fetch("/api/me").then((r) => r.json()).then((j) => j.data.email));
+    await fresh.goto(BASE + "/login");
+    await fresh.fill("#email", aEmail);
+    await fresh.fill("#password", PASSWORD);
+    await fresh.click("#login-form button[type=submit]");
+    await fresh.locator("#mfa-form:not([hidden])").waitFor();
+    await fresh.fill("#mfa-code", totp(secret, 1));
+    await Promise.all([fresh.waitForURL(/\/discover/), fresh.click("#mfa-form button[type=submit]")]);
+    await fresh.close();
   });
 
   await step("no uncaught browser errors", async () => {

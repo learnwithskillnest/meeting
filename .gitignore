@@ -20,6 +20,7 @@ venv/
 node_modules/
 e2e/test-results/
 e2e/report/
+e2e/last-results.json
 
 # OS / editors
 .DS_Store
