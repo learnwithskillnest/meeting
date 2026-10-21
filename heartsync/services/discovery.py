@@ -27,6 +27,8 @@ from .profiles import haversine_km, public_profile
 
 CANDIDATE_CAP = 500
 PAGE_SIZE = 20
+# Locations are city centroids, so "nearby" must cover neighbouring cities.
+NEARBY_DEFAULT_KM = 100
 
 BASIC_FILTERS = {"age_min", "age_max", "genders", "goals", "languages", "country", "region", "city",
                  "max_distance_km", "sort", "mode", "cursor", "limit", "strict"}
@@ -299,7 +301,7 @@ def search(conn: sqlite3.Connection, viewer: CurrentUser, f: Filters) -> dict:
         if not me["nearby_enabled"]:
             raise APIError(400, "nearby_disabled", "Turn on Nearby in your discovery settings to use this.",
                            {"next": "/settings/discovery"})
-        max_km = max_km or 50
+        max_km = max_km or NEARBY_DEFAULT_KM
     max_km = max_km or me["pref_dist"]
     if max_km:
         if me["lat_approx"] is None:

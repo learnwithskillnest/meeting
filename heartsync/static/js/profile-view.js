@@ -29,8 +29,8 @@
     const interests = (p.interests || []).map((i) => `<span class="tag">${esc(interestLabels[i] || i)}</span>`).join("");
     const qualities = (p.partner_qualities || []).map((q) => `<span class="tag">${esc(HS.label(cat.multi_fields.partner_qualities, q))}</span>`).join("");
     const travel = (p.travel_interests || []).map((q) => `<span class="tag">${esc(HS.label(cat.multi_fields.travel_interests, q))}</span>`).join("");
-    const badges = [p.verification.photo ? `<span class="tag verified">${HS.icon("check")} Photo verified</span>` : "",
-      p.verification.phone ? `<span class="tag verified">${HS.icon("phone")} Phone verified</span>` : ""].join("");
+    const badges = [p.verification.photo_verified ? `<span class="tag verified">${HS.icon("check")} Photo verified</span>` : "",
+      p.verification.phone_verified ?`<span class="tag verified">${HS.icon("phone")} Phone verified</span>` : ""].join("");
 
     let actions = "";
     if (self) {

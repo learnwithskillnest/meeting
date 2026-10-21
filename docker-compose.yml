@@ -1,0 +1,18 @@
+# Local / single-server deployment.
+#   cp .env.example .env   # then fill in values
+#   docker compose up --build
+services:
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_PATH: /data/heartsync.db
+      MEDIA_ROOT: /data/media
+    ports:
+      - "8000:8000"
+    volumes:
+      - heartsync-data:/data
+    restart: unless-stopped
+
+volumes:
+  heartsync-data:

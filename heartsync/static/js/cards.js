@@ -10,7 +10,7 @@
       : `<div class="no-photo" aria-hidden="true">${HS.initials(p.display_name)}</div>`;
   };
 
-  HS.cards.verified = (p) => (p.verification && p.verification.photo)
+  HS.cards.verified = (p) => (p.verification && p.verification.photo_verified)
     ? `<span class="badge-verified" title="Photo verified" aria-label="Photo verified">${HS.icon("check")}</span>` : "";
 
   HS.cards.mini = (p, opts) => {

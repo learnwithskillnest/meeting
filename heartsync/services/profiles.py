@@ -339,7 +339,7 @@ def public_profile(conn: sqlite3.Connection, viewer_id: str, target_id: str, rec
         "future_goals": row["future_goals"],
         "interests": interest_slugs(conn, target_id),
         "photos": photo_list(conn, target_id),
-        "verification": {"phone": bool(row["phone_verified_at"]), "photo": bool(row["photo_verified"])},
+        "verification": {"phone_verified": bool(row["phone_verified_at"]), "photo_verified": bool(row["photo_verified"])},
         "distance": distance_label(km),
         "matched": matched,
         "completeness": row["completeness"],

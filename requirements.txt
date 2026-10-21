@@ -1,0 +1,10 @@
+# Runtime dependencies (versions verified in the build environment).
+starlette>=1.7,<2
+uvicorn>=0.30
+jinja2>=3.1
+pydantic>=2.7,<3
+python-multipart>=0.0.9
+itsdangerous>=2.1
+pillow>=10.3
+# Test client dependency for Starlette's TestClient
+httpx>=0.27
