@@ -26,3 +26,4 @@ e2e/last-results.json
 .DS_Store
 .idea/
 .vscode/
+run-local-log.txt
