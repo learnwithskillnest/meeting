@@ -288,7 +288,7 @@ legend { font-weight: 700; margin-bottom: .5rem; }
 .auth-card h1 { font-size: 1.9rem; }
 
 /* ----------------------------------------------------- profile cards */
-.deck { position: relative; width: min(400px, 100%); margin: 0 auto; height: clamp(420px, calc(100vh - 330px), 600px); }
+.deck { position: relative; width: min(400px, 100%); margin: 0 auto; height: clamp(380px, calc(100vh - 400px), 600px); }
 .profile-card {
   position: absolute; inset: 0; border-radius: var(--radius-lg); overflow: hidden; background: var(--surface-2);
   box-shadow: var(--shadow-lg); user-select: none; touch-action: pan-y; will-change: transform;
