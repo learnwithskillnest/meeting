@@ -166,3 +166,27 @@ class UnitTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ProductionConfigTests(unittest.TestCase):
+    BASE = dict(app_env="production", secret_key="k" * 48, database_path=":memory:", base_url="https://example.org",
+                cookie_secure=True, sms_provider="twilio", twilio_account_sid="AC-placeholder",
+                twilio_auth_token="placeholder", twilio_from_number="+10000000000", email_provider="smtp",
+                smtp_host="smtp.example.org", payment_provider="stripe", stripe_secret_key="placeholder",
+                stripe_webhook_secret="placeholder", stripe_price_plus="price_a", stripe_price_premium="price_b")
+
+    def test_complete_production_config_boots(self):
+        from heartsync.config import Settings
+        s = Settings(**self.BASE)
+        self.assertTrue(s.require_staff_mfa)
+
+    def test_each_missing_setting_is_reported(self):
+        from heartsync.config import Settings
+        for key, bad in (("twilio_auth_token", None), ("smtp_host", None), ("stripe_webhook_secret", None),
+                         ("cookie_secure", False), ("base_url", "http://example.org"), ("sms_provider", "carrier-pigeon")):
+            with self.assertRaises(RuntimeError, msg=key):
+                Settings(**{**self.BASE, key: bad})
+
+    def test_payments_can_be_disabled_in_production(self):
+        from heartsync.config import Settings
+        Settings(**{**self.BASE, "payment_provider": "none"})

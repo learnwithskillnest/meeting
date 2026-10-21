@@ -176,6 +176,9 @@ class Settings:
                 )
             if self.payment_provider == "mock":
                 raise RuntimeError("PAYMENT_PROVIDER=mock is development-only. Use PAYMENT_PROVIDER=stripe.")
+            problems = self.production_problems()
+            if problems:
+                raise RuntimeError("Production configuration incomplete:\n  - " + "\n  - ".join(problems))
         else:
             if not self.secret_key:
                 # Development convenience: persist a random key under var/ so sessions
@@ -191,6 +194,33 @@ class Settings:
                     self.secret_key = secrets.token_urlsafe(48)
             if not self.mock_webhook_secret:
                 self.mock_webhook_secret = "dev-" + secrets.token_urlsafe(24)
+
+    def production_problems(self) -> list[str]:
+        """Settings a production deployment needs; checked at startup so a
+        misconfigured server fails immediately instead of at the first SMS or payment."""
+        p: list[str] = []
+        if self.sms_provider == "twilio" and not (self.twilio_account_sid and self.twilio_auth_token and self.twilio_from_number):
+            p.append("SMS_PROVIDER=twilio needs TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN and TWILIO_FROM_NUMBER")
+        elif self.sms_provider not in ("twilio", "console"):
+            p.append(f"Unknown SMS_PROVIDER '{self.sms_provider}'")
+        if self.email_provider == "smtp" and not self.smtp_host:
+            p.append("EMAIL_PROVIDER=smtp needs SMTP_HOST (and usually SMTP_USER/SMTP_PASSWORD)")
+        elif self.email_provider not in ("smtp", "console"):
+            p.append(f"Unknown EMAIL_PROVIDER '{self.email_provider}'")
+        if self.payment_provider == "stripe":
+            missing = [k for k, v in (("STRIPE_SECRET_KEY", self.stripe_secret_key),
+                                      ("STRIPE_WEBHOOK_SECRET", self.stripe_webhook_secret),
+                                      ("STRIPE_PRICE_PLUS", self.stripe_price_plus),
+                                      ("STRIPE_PRICE_PREMIUM", self.stripe_price_premium)) if not v]
+            if missing:
+                p.append("PAYMENT_PROVIDER=stripe needs " + ", ".join(missing))
+        elif self.payment_provider not in ("stripe", "mock", "none"):
+            p.append(f"Unknown PAYMENT_PROVIDER '{self.payment_provider}'")
+        if not self.cookie_secure:
+            p.append("COOKIE_SECURE=true is required (serve the site over HTTPS)")
+        if not self.base_url.startswith("https://"):
+            p.append("BASE_URL must be the public https:// address")
+        return p
 
     @property
     def is_production(self) -> bool:
