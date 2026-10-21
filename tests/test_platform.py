@@ -100,6 +100,9 @@ class AccountLifecycleTests(AppTestCase):
         m = self.man("m@example.com")
         info = self.match(w, m)
         w.post(f"/api/conversations/{info['conversation_id']}/messages", {"body": "goodbye"})
+        from heartsync.services import mfa
+        secret = w.post("/api/auth/mfa/setup", {"password": PASSWORD}).json()["data"]["secret"].replace(" ", "")
+        self.assertEqual(w.post("/api/auth/mfa/enable", {"code": mfa.code_at(secret, mfa.current_step())}).status_code, 200)
         self.assertEqual(w.post("/api/account/delete", {"password": "wrong", "confirm": "DELETE"}).status_code, 400)
         self.assertEqual(w.post("/api/account/delete", {"password": PASSWORD, "confirm": "nope"}).status_code, 400)
         r = w.post("/api/account/delete", {"password": PASSWORD, "confirm": "DELETE"})
@@ -109,6 +112,8 @@ class AccountLifecycleTests(AppTestCase):
         self.assertEqual(sql("SELECT COUNT(*) FROM profile_photos WHERE user_id=?", (w.user_id,))[0][0], 0)
         self.assertIsNone(sql("SELECT phone_e164 FROM user_contacts WHERE user_id=?", (w.user_id,))[0][0])
         self.assertEqual(sql("SELECT COUNT(*) FROM messages WHERE body='goodbye'")[0][0], 0)
+        for table in ("user_mfa", "mfa_recovery_codes", "mfa_challenges", "otp_codes", "auth_tokens"):
+            self.assertEqual(sql(f"SELECT COUNT(*) FROM {table} WHERE user_id=?", (w.user_id,))[0][0], 0, table)
         self.assertEqual(w.get("/api/me").status_code, 401)
         r = self.anon().post("/api/auth/login", {"email": "del@example.com", "password": PASSWORD})
         self.assertEqual(r.status_code, 401)

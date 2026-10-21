@@ -375,7 +375,7 @@ def deactivate(conn: sqlite3.Connection, user: CurrentUser) -> None:
 def delete_account(conn: sqlite3.Connection, user: CurrentUser, password: str) -> None:
     """Hard-deletes personal data. Keeps a tombstone user row (no PII) so that
     moderation records and the counterpart's conversation integrity survive,
-    per the data-retention policy (docs/DATA_RETENTION.md)."""
+    per the data-retention policy (docs/DATABASE.md#data-retention)."""
     row = dbm.one(conn, "SELECT password_hash FROM users WHERE id=?", (user.id,))
     if not row or not security.verify_password(password, row["password_hash"]):
         raise bad_request("Password is incorrect.", {"password": "Incorrect password."})
@@ -397,6 +397,10 @@ def delete_account(conn: sqlite3.Connection, user: CurrentUser, password: str) -
         conn.execute("DELETE FROM notifications WHERE user_id=?", (user.id,))
         conn.execute("DELETE FROM otp_codes WHERE user_id=?", (user.id,))
         conn.execute("DELETE FROM auth_tokens WHERE user_id=?", (user.id,))
+        conn.execute("DELETE FROM user_mfa WHERE user_id=?", (user.id,))
+        conn.execute("DELETE FROM mfa_recovery_codes WHERE user_id=?", (user.id,))
+        conn.execute("DELETE FROM mfa_challenges WHERE user_id=?", (user.id,))
+        conn.execute("DELETE FROM dating_preferences WHERE user_id=?", (user.id,))
         conn.execute("DELETE FROM phone_shares WHERE owner_id=? OR recipient_id=?", (user.id, user.id))
         conn.execute("UPDATE user_contacts SET phone_e164=NULL, phone_verified_at=NULL, updated_at=? WHERE user_id=?",
                      (now, user.id))
