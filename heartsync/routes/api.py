@@ -18,7 +18,8 @@ from .. import security
 from ..config import get_settings
 from ..providers import payments, storage
 from ..realtime import hub
-from ..services import accounts, admin, billing, chat, discovery, matching, mfa, phone, profiles, safety
+from ..services import (accounts, admin, assist, billing, chat, discovery, matching, mfa, phone, profiles,
+                        safety)
 from ..services.notifications import get_prefs, set_prefs, unread_count
 from ..web import (APIError, bad_request, client_ip, error_response, get_db, not_found, ok, parse,
                    require_admin, require_dating, require_staff, require_user, too_many)
@@ -476,6 +477,26 @@ async def photo_verification(request: Request):
     data = await read_upload(request)
     profiles.request_photo_verification(get_db(request), user, data)
     return ok({"status": "pending"}, status=201)
+
+
+class AssistIn(BaseModel):
+    kind: Literal["tips", "bio"]
+    tone: Literal["warm", "playful", "direct"] = "warm"
+
+
+@api("/api/profile/assist", ["POST"])
+async def profile_assist(request: Request):
+    """Writing suggestions for the member's own profile. Never saved automatically."""
+    user = require_user(request)
+    body = await parse(request, AssistIn)
+    if not security.allow("assist", user.id):
+        raise too_many("You've asked for a lot of suggestions. Try again in a little while.")
+    conn = get_db(request)
+    if not profiles.get_raw(conn, user.id):
+        raise bad_request("Fill in the basics first, then ask for suggestions.", code="profile_missing")
+    if body.kind == "tips":
+        return ok({"tips": assist.tips(conn, user), "label": "Suggestions to strengthen your profile"})
+    return ok(assist.bio_draft(conn, user, body.tone))
 
 
 @api("/api/profiles/{uid}", ["GET"])

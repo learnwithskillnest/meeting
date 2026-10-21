@@ -146,6 +146,7 @@ LIMITS = {
     "otp_verify": (10, 900),
     "mfa_verify": (20, 900),
     "mfa_manage": (20, 900),
+    "assist": (30, 3600),
     "swipe": (120, 60),
     "message": (30, 60),
     "upload": (20, 600),

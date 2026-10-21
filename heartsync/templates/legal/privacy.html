@@ -27,6 +27,9 @@
 <h2>Who can see your data</h2>
 <p>Other members see your profile according to your visibility settings. Our moderators can access reported content and account details needed to investigate. Service providers (hosting, email, SMS, payments) process data on our behalf under contract.</p>
 
+<h2>Writing suggestions</h2>
+<p>If you ask for profile writing help, we generate a suggestion from your own profile details (name, city, job, interests, goals and similar lifestyle fields). Sensitive fields such as religion, family plans and relationship status are never used. Suggestions are never saved or posted unless you choose to. {% if settings.ai_provider == 'anthropic' %}These details are sent to our AI provider to write the suggestion and are not used by us for any other purpose.{% else %}Suggestions are currently written on our own servers; no profile data is sent to an outside AI service.{% endif %} [Counsel to confirm provider terms before enabling an outside AI provider.]</p>
+
 <h2>Your rights</h2>
 <ul>
   <li>Access and download your data (Settings → Account → Download my data).</li>
@@ -40,7 +43,7 @@
 <p>When you delete your account we delete your profile, photos, likes, contact details and message contents promptly. We retain limited records — such as reports made about an account, moderation decisions, payment records required by tax law, and an anonymised account tombstone — for as long as needed for safety, dispute resolution and legal obligations. [Counsel to set specific periods.]</p>
 
 <h2>Security</h2>
-<p>We use encrypted connections, hashed passwords, private media storage with expiring links, rate limiting and access controls. No system is perfectly secure; tell us at {{ settings.support_email }} if you find a problem.</p>
+<p>We use encrypted connections, hashed passwords, optional two-factor sign-in, private media storage with expiring links, rate limiting and access controls. No system is perfectly secure; tell us at {{ settings.support_email }} if you find a problem.</p>
 
 <h2>Children</h2>
 <p>The Service is only for adults 18+. We remove accounts we believe belong to minors.</p>

@@ -560,3 +560,9 @@ select.w-auto { width: auto; min-height: 38px; padding: .35rem 2rem .35rem .7rem
 .steps-list { padding-left: 1.25rem; display: grid; gap: .5rem; margin: 1rem 0; }
 .steps-list code { background: var(--surface-2); padding: .15rem .4rem; border-radius: 6px; letter-spacing: .04em; }
 #mfa-code-list { columns: 2; font-size: .95rem; margin: .5rem 0; }
+.assist { border: 1px dashed var(--line, #e7dbe0); border-radius: 14px; padding: .85rem 1rem; display: grid; gap: .6rem; }
+.assist select.sm { padding: .35rem .6rem; font-size: .9rem; width: auto; }
+.assist-card { background: var(--surface-2); border-radius: 12px; padding: .8rem 1rem; display: grid; gap: .5rem; }
+.assist-draft { font-style: italic; margin: 0; }
+.assist-tips { margin: 0; padding-left: 1.1rem; display: grid; gap: .35rem; }
+.row.wrap { flex-wrap: wrap; }

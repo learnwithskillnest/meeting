@@ -96,6 +96,18 @@
         <h2>About you</h2>
         ${field("Headline", `<input id="f-headline" name="headline" maxlength="90" value="${esc(p.headline || "")}" placeholder="e.g. Weekend trekker, weekday spreadsheet wrangler">`, null, "headline")}
         ${field("About me", `<textarea id="f-about" name="about" maxlength="1200" placeholder="What makes you smile? What are you looking for?">${esc(p.about || "")}</textarea>`, "Please don't include phone numbers, emails or social handles.", "about")}
+        ${onboarding ? "" : `<div class="assist" id="assist">
+          <div class="row between wrap gap-sm">
+            <span class="label">Writing help <span class="tag">Suggestions only</span></span>
+            <span class="row gap-sm wrap">
+              <label class="sr-only" for="assist-tone">Tone</label>
+              <select id="assist-tone" class="sm"><option value="warm">Warm</option><option value="playful">Playful</option><option value="direct">Direct</option></select>
+              <button type="button" class="btn sm" data-assist="bio">Draft my “About me”</button>
+              <button type="button" class="btn sm" data-assist="tips">Profile tips</button>
+            </span>
+          </div>
+          <div id="assist-out" aria-live="polite"></div>
+        </div>`}
         ${fieldset("Interests", interestChips(p.interests || []), "Pick up to 15. Shared interests help us explain why you might click.", "interests")}
       </section>
       <section class="card stack" data-step="lifestyle">
@@ -268,6 +280,33 @@
   });
 
   root.addEventListener("click", async (e) => {
+    const asst = e.target.closest("[data-assist]");
+    if (asst) {
+      const out = $("#assist-out");
+      HS.busy(asst, true);
+      try {
+        const kind = asst.dataset.assist;
+        const r = await api("POST", "/api/profile/assist", { kind, tone: $("#assist-tone").value });
+        if (kind === "bio") {
+          out.innerHTML = `<div class="assist-card"><p class="small muted">${esc(r.label)}. Based on what you saved — edit it so it sounds like you.</p>
+            <p class="assist-draft">${esc(r.draft)}</p>
+            <div class="row gap-sm"><button type="button" class="btn sm primary" data-use-draft>Use this draft</button>
+            <button type="button" class="btn sm" data-assist="bio">Try another</button></div></div>`;
+          out.querySelector("[data-use-draft]").addEventListener("click", () => {
+            const ta = $("#f-about");
+            ta.value = r.draft;
+            ta.focus();
+            toast("Draft added — review it, then save changes.", "success");
+          });
+        } else {
+          out.innerHTML = r.tips.length
+            ? `<div class="assist-card"><p class="small muted">${esc(r.label)}</p><ul class="assist-tips">${r.tips.map((t) => `<li>${esc(t.text)}</li>`).join("")}</ul></div>`
+            : `<div class="assist-card"><p class="small">Your profile already covers the essentials. Nice work.</p></div>`;
+        }
+      } catch (err) { fail(err); }
+      finally { HS.busy(asst, false); }
+      return;
+    }
     const del = e.target.closest("[data-delete-photo]");
     if (del) {
       if (!(await HS.confirm("Remove this photo?", "It will be deleted permanently.", "Remove", true))) return;
